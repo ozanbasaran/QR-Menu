@@ -8,7 +8,6 @@ import { restaurants, restaurantMenus, getRestaurantCategories } from './data/me
 function App() {
   const [selectedRestaurant, setSelectedRestaurant] = useState(restaurants[0]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [isNavOpen, setIsNavOpen] = useState(false);
 
   // Update selected category when restaurant changes
   useEffect(() => {
@@ -23,23 +22,17 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex justify-center items-center w-full">
-  <h1 className="text-2xl font-bold text-gray-900 mx-auto">BSN Cloud Kitchen</h1>
-  <button
-    onClick={() => setIsNavOpen(!isNavOpen)}
-    className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-  >
-    <Menu size={24} />
-  </button>
-</div>
+          <div className="flex justify-center items-center w-full">
+            <h1 className="text-2xl font-bold text-gray-900 mx-auto">BSN Cloud Kitchen</h1>
+          </div>
         </div>
 
-        <div className={`${isNavOpen ? 'block' : 'hidden'} md:block border-t`}>
+        <div className="border-t">
+          {/* Always render RestaurantNav */}
           <RestaurantNav
             selectedRestaurant={selectedRestaurant}
             onSelectRestaurant={(restaurant) => {
               setSelectedRestaurant(restaurant);
-              setIsNavOpen(false);
             }}
           />
         </div>
@@ -58,13 +51,13 @@ function App() {
           </div>
         )}
 
-        <div className={`${isNavOpen ? 'block' : 'hidden'} md:block border-t`}>
+        <div className="border-t">
+          {/* Always render CategoryNav and make it scrollable */}
           <CategoryNav
             selectedCategory={selectedCategory}
             selectedRestaurant={selectedRestaurant}
             onSelectCategory={(category) => {
               setSelectedCategory(category);
-              setIsNavOpen(false);
             }}
           />
         </div>
