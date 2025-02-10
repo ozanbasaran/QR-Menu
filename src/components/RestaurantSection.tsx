@@ -27,7 +27,6 @@ export function RestaurantSection({ restaurant, selectedCategory }: RestaurantSe
       className="py-8" 
       id={`${restaurant.name.toLowerCase().replace(/\s+/g, '-')}-${selectedCategory.toLowerCase()}`}
     >
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">{restaurant.name}</h2>
       <div className="mb-12">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-2xl font-semibold text-gray-800">{category.name}</h3>

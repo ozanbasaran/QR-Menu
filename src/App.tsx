@@ -23,15 +23,15 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-900">BSN Cloud Kitchen</h1>
-            <button
-              onClick={() => setIsNavOpen(!isNavOpen)}
-              className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            >
-              <Menu size={24} />
-            </button>
-          </div>
+        <div className="flex justify-center items-center w-full">
+  <h1 className="text-2xl font-bold text-gray-900 mx-auto">BSN Cloud Kitchen</h1>
+  <button
+    onClick={() => setIsNavOpen(!isNavOpen)}
+    className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+  >
+    <Menu size={24} />
+  </button>
+</div>
         </div>
 
         <div className={`${isNavOpen ? 'block' : 'hidden'} md:block border-t`}>
