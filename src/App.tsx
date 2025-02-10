@@ -10,6 +10,7 @@ function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [scrollThreshold] = useState(100); // Threshold for showing/hiding header (100px)
 
   // Update selected category when restaurant changes
   useEffect(() => {
@@ -20,20 +21,23 @@ function App() {
   // Find the current restaurant data
   const currentRestaurant = restaurantMenus.find(r => r.name === selectedRestaurant);
 
-  // Scroll behavior to hide/show header elements
+  // Scroll behavior to hide/show header elements based on scroll direction and threshold
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
 
-      // Detect if the user is scrolling down or up
-      if (currentScrollPos > prevScrollPos) {
-        // Scrolling down, hide header
+      // If scrolling down and passed threshold, hide the header
+      if (currentScrollPos > prevScrollPos && currentScrollPos > scrollThreshold) {
         setIsHeaderVisible(false);
-      } else {
-        // Scrolling up, show header if at the top
-        if (currentScrollPos === 0 || window.innerWidth > 768) {
-          setIsHeaderVisible(true); // Show on scroll up and on desktop
-        }
+      } 
+      // If scrolling up and passed threshold, show the header
+      else if (currentScrollPos < prevScrollPos && currentScrollPos <= scrollThreshold) {
+        setIsHeaderVisible(true);
+      }
+
+      // Always show the header when at the very top (scroll position 0)
+      if (currentScrollPos === 0) {
+        setIsHeaderVisible(true);
       }
 
       setPrevScrollPos(currentScrollPos);
@@ -43,7 +47,7 @@ function App() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollPos]);
+  }, [prevScrollPos, scrollThreshold]);
 
   return (
     <div className="min-h-screen bg-gray-50">
