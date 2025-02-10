@@ -25,13 +25,14 @@ function App() {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
 
+      // Detect if the user is scrolling down or up
       if (currentScrollPos > prevScrollPos) {
-        // User is scrolling down, hide the header
+        // Scrolling down, hide header
         setIsHeaderVisible(false);
       } else {
-        // User is scrolling up, show the header only when at the top
-        if (currentScrollPos === 0) {
-          setIsHeaderVisible(true);
+        // Scrolling up, show header if at the top
+        if (currentScrollPos === 0 || window.innerWidth > 768) {
+          setIsHeaderVisible(true); // Show on scroll up and on desktop
         }
       }
 
