@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Menu } from 'lucide-react';
 import { RestaurantNav } from './components/RestaurantNav';
 import { CategoryNav } from './components/CategoryNav';
 import { RestaurantSection } from './components/RestaurantSection';
@@ -9,7 +8,8 @@ function App() {
   const [selectedRestaurant, setSelectedRestaurant] = useState(restaurants[0]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true); // Track header visibility
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
 
   // Update selected category when restaurant changes
   useEffect(() => {
@@ -20,47 +20,42 @@ function App() {
   // Find the current restaurant data
   const currentRestaurant = restaurantMenus.find(r => r.name === selectedRestaurant);
 
-  // Detect scroll direction to hide/show header
+  // Scroll behavior to hide/show header elements
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-    
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        // Scrolling down
+      const currentScrollPos = window.pageYOffset;
+
+      if (currentScrollPos > prevScrollPos) {
+        // User is scrolling down, hide the header
         setIsHeaderVisible(false);
       } else {
-        // Scrolling up
-        setIsHeaderVisible(true);
+        // User is scrolling up, show the header only when at the top
+        if (currentScrollPos === 0) {
+          setIsHeaderVisible(true);
+        }
       }
-      lastScrollY = window.scrollY;
+
+      setPrevScrollPos(currentScrollPos);
     };
 
     window.addEventListener('scroll', handleScroll);
-
-    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [prevScrollPos]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header
-        className={`transition-all duration-300 bg-white shadow-md sticky top-0 z-50 ${isHeaderVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      <header 
+        className={`bg-white shadow-md sticky top-0 z-50 transition-all duration-300 ${isHeaderVisible ? 'opacity-100' : 'opacity-0'}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-center items-center w-full">
             <h1 className="text-2xl font-bold text-gray-900 mx-auto">BSN Cloud Kitchen</h1>
-            <button
-              onClick={() => setIsNavOpen(!isNavOpen)}
-              className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            >
-              <Menu size={24} />
-            </button>
           </div>
         </div>
 
-        <div className={`${isNavOpen ? 'block' : 'hidden'} md:block border-t`}>
+        <div className="border-t">
           <RestaurantNav
             selectedRestaurant={selectedRestaurant}
             onSelectRestaurant={(restaurant) => {
@@ -84,7 +79,7 @@ function App() {
           </div>
         )}
 
-        <div className={`${isNavOpen ? 'block' : 'hidden'} md:block border-t`}>
+        <div className="border-t">
           <CategoryNav
             selectedCategory={selectedCategory}
             selectedRestaurant={selectedRestaurant}
